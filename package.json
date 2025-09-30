@@ -1,0 +1,31 @@
+{
+  "name": "@agusmgarcia/next-my-game",
+  "core": "app",
+  "version": "0.0.0",
+  "private": true,
+  "author": "Agus Garcia",
+  "description": "",
+  "scripts": {
+    "build": "react-essentials-commands-build",
+    "check": "react-essentials-commands-check",
+    "deploy": "react-essentials-commands-deploy",
+    "format": "react-essentials-commands-format",
+    "regenerate": "react-essentials-commands-regenerate",
+    "start": "react-essentials-commands-start",
+    "test": "react-essentials-commands-test"
+  },
+  "dependencies": {
+    "@agusmgarcia/react-essentials-utils": "^0.10.3",
+    "next": "^15.5.6",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "three": "^0.180.0"
+  },
+  "devDependencies": {
+    "@agusmgarcia/react-essentials-commands": "^0.12.4",
+    "@types/three": "^0.180.0"
+  },
+  "engines": {
+    "node": "22.16.0"
+  }
+}

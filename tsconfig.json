@@ -1,0 +1,14 @@
+{
+  "extends": "@agusmgarcia/react-essentials-commands/tsconfig.json",
+  "compilerOptions": {
+    "baseUrl": "./",
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "paths": {
+      "#public/*": ["public/*"],
+      "#src/*": ["src/*"]
+    }
+  },
+  "exclude": [".next", "dist", "node_modules"],
+  "include": ["**/*.ts", "**/*.tsx", "next-env.d.ts"]
+}
