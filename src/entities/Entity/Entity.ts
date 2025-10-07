@@ -1,15 +1,21 @@
 import * as Three from "three";
 
+import { type Component } from "#src/components";
 import { Observable } from "#src/utils";
 
-import { type Event, type ReadonlyChildrenList } from "./Entity.types";
-import { ChildrenList } from "./Entity.utils";
+import {
+  type Event,
+  type ReadonlyChildrenList,
+  type ReadonlyComponentsList,
+} from "./Entity.types";
+import { ChildrenList, ComponentsList } from "./Entity.utils";
 
 export default class Entity extends Observable<Event> {
   private static readonly MAP = new Map<Three.Object3D, Entity>();
 
   private readonly _raw: Three.Object3D;
   private readonly _children: ChildrenList;
+  private readonly _components: ComponentsList;
 
   constructor(raw: Three.Object3D);
 
@@ -20,6 +26,8 @@ export default class Entity extends Observable<Event> {
 
     this._raw = raw || new Three.Object3D();
     this._children = new ChildrenList();
+    this._components = new ComponentsList();
+
     Entity.MAP.set(this._raw, this);
   }
 
@@ -69,10 +77,45 @@ export default class Entity extends Observable<Event> {
     });
   }
 
+  get components(): ReadonlyComponentsList {
+    return this._components;
+  }
+
+  addComponent(component: Component): void {
+    const prevEntity = component["_entity"];
+    if (!!prevEntity) prevEntity.removeComponent(component);
+
+    this._components.add(component);
+    component["attachEntity"](this);
+
+    this.notifyListeners({
+      channel: `component:${component.id}`,
+      payload: component,
+      source: this,
+      type: "COMPONENT_ADDED",
+    });
+  }
+
+  removeComponent(component: Component): void {
+    this._components.remove(component);
+    component["detachEntity"]();
+
+    this.notifyListeners({
+      channel: `component:${component.id}`,
+      payload: component,
+      source: this,
+      type: "COMPONENT_REMOVED",
+    });
+  }
+
   override dispose(): void {
     const children = [...this.children];
     children.forEach((child) => this.removeChild(child));
     children.forEach((child) => child.dispose());
+
+    const components = [...this.components];
+    components.forEach((component) => this.removeComponent(component));
+    components.forEach((component) => component.dispose());
 
     super.dispose();
   }
