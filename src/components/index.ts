@@ -4,5 +4,6 @@ export * from "./CameraComponent";
 export * from "./Component";
 export * from "./DirectionalLightComponent";
 export * from "./PointLightComponent";
+export * from "./RenderComponent";
 export * from "./ScriptComponent";
 export * from "./TransformComponent";
