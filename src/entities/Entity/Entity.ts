@@ -3,6 +3,7 @@ import * as Three from "three";
 import { type Component } from "#src/components";
 import { Observable } from "#src/utils";
 
+import { type Scene } from "../Scene";
 import {
   type Event,
   type ReadonlyChildrenList,
@@ -43,11 +44,16 @@ export default class Entity extends Observable<Event> {
     return !!this._raw.parent ? Entity.MAP.get(this._raw.parent) : undefined;
   }
 
-  get root(): Entity {
+  get scene(): Scene {
     // eslint-disable-next-line @typescript-eslint/no-this-alias
     let aux: Entity = this;
-    while (!!aux.parent) aux = aux.parent;
-    return aux;
+
+    while (aux["_raw"].type !== "Scene") {
+      if (!aux.parent) throw new Error("Entity doesn't belong to any scene");
+      aux = aux.parent;
+    }
+
+    return aux as Scene;
   }
 
   addChild(child: Entity): void {
