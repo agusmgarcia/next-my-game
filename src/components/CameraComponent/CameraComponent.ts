@@ -12,7 +12,7 @@ export default class CameraComponent extends Component<Event> {
   private _canvas: HTMLCanvasElement;
 
   constructor(options: Options) {
-    super({ single: true });
+    super();
 
     this._raw = new Three.PerspectiveCamera(
       options.fov,
