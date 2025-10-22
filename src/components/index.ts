@@ -6,4 +6,5 @@ export * from "./DirectionalLightComponent";
 export * from "./PointLightComponent";
 export * from "./RenderComponent";
 export * from "./ScriptComponent";
+export * from "./StateComponent";
 export * from "./TransformComponent";
