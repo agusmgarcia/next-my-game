@@ -1,9 +1,9 @@
 export default abstract class State<TInitArgs extends any[] = []> {
-  constructor() {}
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  protected onInit(...args: TInitArgs): void {}
 
-  protected abstract dispose(): void;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  protected onUpdate(deltaTime: number): void {}
 
-  protected abstract init(...args: TInitArgs): void;
-
-  protected abstract update(deltaTime: number): void;
+  protected onDispose(): void {}
 }

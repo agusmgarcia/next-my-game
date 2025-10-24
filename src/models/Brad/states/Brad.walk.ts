@@ -7,12 +7,12 @@ export default class Walk extends State<[brad: Brad]> {
 
   private _brad: Brad = undefined!;
 
-  protected override init(brad: Brad): void {
+  protected override onInit(brad: Brad): void {
     this._brad = brad;
     this._brad.setAnimation("Walk");
   }
 
-  protected override update(deltaTime: number): void {
+  protected override onUpdate(deltaTime: number): void {
     this._brad.setPosition(
       Vector3.add(
         this._brad.position,
@@ -21,5 +21,5 @@ export default class Walk extends State<[brad: Brad]> {
     );
   }
 
-  protected override dispose(): void {}
+  protected override onDispose(): void {}
 }

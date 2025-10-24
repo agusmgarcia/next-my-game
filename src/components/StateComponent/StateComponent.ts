@@ -37,7 +37,7 @@ export default class StateComponent extends ScriptComponent {
   protected override onUpdate(deltaTime: number): void {
     if (!!this._newState && !!this._newStateArgs) {
       if (!!this._state) {
-        this._state["dispose"]();
+        this._state["onDispose"]();
         StateComponent.STATE_FACTORY.set(this._state);
         this._state = undefined;
       }
@@ -45,10 +45,10 @@ export default class StateComponent extends ScriptComponent {
       this._state = this._newState;
       this._newState = undefined;
 
-      this._state["init"](...this._newStateArgs);
+      this._state["onInit"](...this._newStateArgs);
       this._newStateArgs = undefined;
     }
 
-    this.state?.["update"](deltaTime);
+    this.state?.["onUpdate"](deltaTime);
   }
 }
