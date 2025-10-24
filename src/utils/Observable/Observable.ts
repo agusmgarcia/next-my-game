@@ -18,7 +18,9 @@ export default class Observable<TEvent extends Event> implements Readonly {
     this._listeners.remove(listener);
   }
 
-  protected notifyListeners(event: TEvent): void {
+  protected notifyListeners<TOtherEvent extends TEvent>(
+    event: TOtherEvent,
+  ): void {
     if (!this._channels[event.channel])
       this._channels[event.channel] = Number.MIN_SAFE_INTEGER;
 
