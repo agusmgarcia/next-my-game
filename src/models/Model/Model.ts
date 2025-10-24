@@ -1,6 +1,6 @@
 import { AnimationComponent, RenderComponent } from "#src/components";
+import { Object } from "#src/entities";
 
-import { Object } from "../Object";
 import { type Options } from "./Model.types";
 
 export default abstract class Model<TAnimations extends string> extends Object {

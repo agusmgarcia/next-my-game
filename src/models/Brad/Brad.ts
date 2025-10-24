@@ -1,7 +1,6 @@
 import { errors } from "@agusmgarcia/react-essentials-utils";
 
 import { StateComponent } from "#src/components";
-import { Model } from "#src/entities";
 import {
   SpriteSheet,
   type SpriteSheetTypes,
@@ -9,6 +8,7 @@ import {
   type TextureTypes,
 } from "#src/utils";
 
+import { Model } from "../Model";
 import spriteSheet from "./Brad.json";
 import normalMap from "./Brad.normal.png";
 import map from "./Brad.png";
