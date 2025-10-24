@@ -20,7 +20,6 @@ export class ComponentsList
   constructor(...components: Component[]);
 
   constructor(...parameters: any[]) {
-    // @ts-expect-error Not sure how to fix it
     super(Component, ...parameters);
   }
 }

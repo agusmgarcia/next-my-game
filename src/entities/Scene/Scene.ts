@@ -21,7 +21,7 @@ export default abstract class Scene extends Entity {
 
   private _disposeAnimationFrame: Func;
 
-  protected constructor() {
+  constructor() {
     super(new Three.Scene());
 
     this._entities = new List();

@@ -6,7 +6,7 @@ import { type Options } from "./ScriptComponent.types";
 export default abstract class ScriptComponent<
   TEvent extends ObservableTypes.Event = any,
 > extends Component<TEvent> {
-  protected constructor(options?: Partial<Options>) {
+  constructor(options?: Partial<Options>) {
     super(options);
   }
 

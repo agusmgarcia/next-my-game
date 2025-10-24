@@ -15,7 +15,7 @@ export default abstract class Component<
   private _entity: Entity | undefined;
   private _removeEntityListeners: Func;
 
-  protected constructor(options?: Partial<Options>) {
+  constructor(options?: Partial<Options>) {
     super();
 
     this._id = Three.MathUtils.generateUUID();
