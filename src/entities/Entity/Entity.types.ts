@@ -10,25 +10,25 @@ export interface ReadonlyComponentsList
 
 export type Event =
   | {
-      channel: string;
+      channel: `child:${string}`;
       payload: Entity;
       source: Entity;
       type: "CHILD_ADDED";
     }
   | {
-      channel: string;
+      channel: `child:${string}`;
       payload: Entity;
       source: Entity;
       type: "CHILD_REMOVED";
     }
   | {
-      channel: string;
+      channel: `component:${string}`;
       payload: Component;
       source: Entity;
       type: "COMPONENT_ADDED";
     }
   | {
-      channel: string;
+      channel: `component:${string}`;
       payload: Component;
       source: Entity;
       type: "COMPONENT_REMOVED";
