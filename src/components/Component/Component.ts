@@ -1,5 +1,5 @@
 import { emptyFunction, type Func } from "@agusmgarcia/react-essentials-utils";
-import { MathUtils } from "three";
+import * as Three from "three";
 
 import { type Entity, type EntityTypes } from "#src/entities";
 import { Observable, type ObservableTypes } from "#src/utils";
@@ -18,7 +18,7 @@ export default abstract class Component<
   protected constructor(options?: Partial<Options>) {
     super();
 
-    this._id = MathUtils.generateUUID();
+    this._id = Three.MathUtils.generateUUID();
     this._single = !!options?.single;
 
     this._entity = undefined;
