@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 
-import { type Scene } from "#src/entities";
-import { TestScene } from "#src/scenes";
+import { type Scene, TestScene } from "#src/scenes";
 
 import type HomePageProps from "./HomePage.types";
 
@@ -21,8 +20,7 @@ export default function useHomePage(props: HomePageProps) {
     if (!scene) return;
 
     setLoading(true);
-    scene
-      .load()
+    scene["load"]()
       .then(() => setLoaded(true))
       .finally(() => setLoading(false));
   }, []);
@@ -36,8 +34,8 @@ export default function useHomePage(props: HomePageProps) {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    scene.init(canvas);
-    scene.run(24);
+    scene["init"](canvas);
+    scene["run"](24);
 
     return () => scene.dispose();
   }, [loaded, loading]);

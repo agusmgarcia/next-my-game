@@ -1,17 +1,14 @@
-import { AmbientLight, Camera, Scene } from "#src/entities";
+import { AmbientLight, Camera } from "#src/entities";
 import { Brad } from "#src/models";
 
-export default class TestScene extends Scene {
-  constructor() {
-    super();
-  }
+import { Scene } from "../Scene";
 
-  override async load(): Promise<void> {
+export default class TestScene extends Scene {
+  protected override async onLoad(): Promise<void> {
     await Promise.all([Brad.load()]);
   }
 
-  override init(...canvas: HTMLCanvasElement[]): void {
-    super.init(...canvas);
+  protected override onInit(...canvas: HTMLCanvasElement[]): void {
     this.addChild(new AmbientLight({ intensity: 0.01 }));
 
     const camera = new Camera({ canvas: canvas[0] });

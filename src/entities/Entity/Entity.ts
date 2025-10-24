@@ -1,9 +1,8 @@
 import * as Three from "three";
 
 import { type Component } from "#src/components";
-import { Observable } from "#src/utils";
+import { Observable, type ObservableTypes } from "#src/utils";
 
-import { type Scene } from "../Scene";
 import {
   type Event,
   type ReadonlyChildrenList,
@@ -11,16 +10,19 @@ import {
 } from "./Entity.types";
 import { ChildrenList, ComponentsList } from "./Entity.utils";
 
-export default class Entity extends Observable<Event> {
+export default class Entity<
+  TEvent extends ObservableTypes.Event = any,
+> extends Observable<TEvent | Event> {
   private static readonly MAP = new Map<Three.Object3D, Entity>();
 
   private readonly _raw: Three.Object3D;
   private readonly _children: ChildrenList;
   private readonly _components: ComponentsList;
 
-  constructor(raw: Three.Object3D);
-
   constructor();
+
+  // @ts-expect-error This constructor is just for internal usage.
+  protected constructor(raw: Three.Object3D);
 
   constructor(raw?: Three.Object3D) {
     super();
@@ -36,24 +38,19 @@ export default class Entity extends Observable<Event> {
     return this._raw.uuid;
   }
 
-  get children(): ReadonlyChildrenList {
-    return this._children;
-  }
-
   get parent(): Entity | undefined {
     return !!this._raw.parent ? Entity.MAP.get(this._raw.parent) : undefined;
   }
 
-  get scene(): Scene {
+  get root(): Entity {
     // eslint-disable-next-line @typescript-eslint/no-this-alias
     let aux: Entity = this;
+    while (!!aux.parent) aux = aux.parent;
+    return aux;
+  }
 
-    while (aux["_raw"].type !== "Scene") {
-      if (!aux.parent) throw new Error("Entity doesn't belong to any scene");
-      aux = aux.parent;
-    }
-
-    return aux as Scene;
+  get children(): ReadonlyChildrenList {
+    return this._children;
   }
 
   addChild(child: Entity): void {
@@ -63,7 +60,7 @@ export default class Entity extends Observable<Event> {
     this._raw.add(child._raw);
     this._children.add(child);
 
-    this.notifyListeners({
+    this.notifyListeners<Event>({
       channel: `child:${child.id}`,
       payload: child,
       source: this,
@@ -75,7 +72,7 @@ export default class Entity extends Observable<Event> {
     this._raw.remove(child._raw);
     this._children.remove(child);
 
-    this.notifyListeners({
+    this.notifyListeners<Event>({
       channel: `child:${child.id}`,
       payload: child,
       source: this,
@@ -94,7 +91,7 @@ export default class Entity extends Observable<Event> {
     this._components.add(component);
     component["attachEntity"](this);
 
-    this.notifyListeners({
+    this.notifyListeners<Event>({
       channel: `component:${component.id}`,
       payload: component,
       source: this,
@@ -106,7 +103,7 @@ export default class Entity extends Observable<Event> {
     this._components.remove(component);
     component["detachEntity"]();
 
-    this.notifyListeners({
+    this.notifyListeners<Event>({
       channel: `component:${component.id}`,
       payload: component,
       source: this,
