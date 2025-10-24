@@ -1,3 +1,4 @@
+export * from "./Factory";
 export * from "./List";
 export * from "./Observable";
 export * from "./SpriteSheet";
