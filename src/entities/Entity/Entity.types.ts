@@ -6,15 +6,7 @@ import type Entity from "./Entity";
 export interface ReadonlyChildrenList extends ListTypes.Readonly<Entity> {}
 
 export interface ReadonlyComponentsList
-  extends TypedListTypes.Readonly<Component> {
-  getSingle<TComponentChild extends Component>(
-    classOf: TypedListTypes.ClassOf<TComponentChild>,
-  ): TComponentChild;
-
-  getSingleOrDefault<TComponentChild extends Component>(
-    classOf: TypedListTypes.ClassOf<TComponentChild>,
-  ): TComponentChild | undefined;
-}
+  extends TypedListTypes.Readonly<Component> {}
 
 export type Event =
   | {

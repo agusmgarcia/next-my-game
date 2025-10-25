@@ -1,3 +1,5 @@
+import { finds } from "@agusmgarcia/react-essentials-utils";
+
 import { List, type ListTypes } from "../List";
 import { type ClassOf, type Readonly } from "./TypedList.types";
 
@@ -27,6 +29,20 @@ export default abstract class TypedList<TElement extends object>
     classOf: ClassOf<TChild>,
   ): ListTypes.Readonly<TChild> {
     return this._prototypes.get(classOf) || TypedList.EMPTY_LIST;
+  }
+
+  getSingle<TChild extends TElement>(classOf: ClassOf<TChild>): TChild {
+    const element = this.getSingleOrDefault(classOf);
+    if (!element)
+      throw new Error(`Element '${classOf.name}' appears more than once`);
+
+    return element;
+  }
+
+  getSingleOrDefault<TChild extends TElement>(
+    classOf: ClassOf<TChild>,
+  ): TChild | undefined {
+    return this.getAll(classOf).find(finds.singleOrDefault);
   }
 
   /**

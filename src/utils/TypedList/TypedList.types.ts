@@ -5,6 +5,12 @@ export interface Readonly<TElement extends object>
   getAll<TChild extends TElement>(
     classOf: ClassOf<TChild>,
   ): ListTypes.Readonly<TChild>;
+
+  getSingle<TChild extends TElement>(classOf: ClassOf<TChild>): TChild;
+
+  getSingleOrDefault<TChild extends TElement>(
+    classOf: ClassOf<TChild>,
+  ): TChild | undefined;
 }
 
 export type ClassOf<TElement extends object> = abstract new (
