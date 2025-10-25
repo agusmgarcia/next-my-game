@@ -2,6 +2,33 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.2.0](https://github.com/agusmgarcia/next-my-game/tree/v0.2.0)
+
+> October 25, 2025
+
+### Features ✅
+
+- **Scene**: add missing systems
+- **RenderSystem**: add system
+- **ScriptsSystem**: add system
+- **System**: add system
+- **Scene**: restructure entity
+- **CameraComponent**: send previous value
+- **Component**: remove onComponentAdded and onComponentRemoved hooks
+- **State**: rename protected methods
+- **TypedList**: add getSingle and getSingleOrDefault methods
+
+### Fixes 🎯
+
+- **Entity**: type event channels
+- remove protected constructors
+- **Observable**: add ability to send custom event
+
+### Chores ⚙️
+
+- **Model**: move it into its own section
+- **Component**: adjust import
+
 ## [v0.1.0](https://github.com/agusmgarcia/next-my-game/tree/v0.1.0)
 
 > October 24, 2025
