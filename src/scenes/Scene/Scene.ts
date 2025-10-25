@@ -2,7 +2,7 @@ import { emptyFunction, type Func } from "@agusmgarcia/react-essentials-utils";
 import * as Three from "three";
 
 import { Entity } from "#src/entities";
-import { type System } from "#src/systems";
+import { RenderSystem, ScriptsSystem, type System } from "#src/systems";
 
 import { type Event, type ReadonlySystemsList } from "./Scene.types";
 import { SystemsList } from "./Scene.utils";
@@ -60,6 +60,8 @@ export default abstract class Scene extends Entity<Event> {
   }
 
   private init(...canvas: HTMLCanvasElement[]): void {
+    this.addSystem(new ScriptsSystem());
+    this.addSystem(new RenderSystem());
     this.onInit(...canvas);
   }
 
