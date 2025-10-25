@@ -1,7 +1,7 @@
 import { emptyFunction, type Func } from "@agusmgarcia/react-essentials-utils";
 import * as Three from "three";
 
-import { type Entity } from "#src/entities";
+import { type Entity, type EntityTypes } from "#src/entities";
 import { type Texture, type TextureTypes } from "#src/utils";
 
 import {
@@ -19,6 +19,7 @@ export default class RenderComponent extends Component {
   private readonly _map: TextureTypes.Readonly;
   private readonly _normalMap: TextureTypes.Readonly | undefined;
 
+  private _removeEntityListener: Func;
   private _removeAnimationListener: Func;
 
   constructor(options: Options) {
@@ -36,6 +37,7 @@ export default class RenderComponent extends Component {
     this._map = options.map;
     this._normalMap = options.normalMap;
 
+    this._removeEntityListener = emptyFunction;
     this._removeAnimationListener = emptyFunction;
   }
 
@@ -49,73 +51,55 @@ export default class RenderComponent extends Component {
 
   protected override onEntityAttached(entity: Entity): void {
     entity["_raw"].add(this._raw);
-    this.attachAnimationComponent(
-      entity.components.getSingleOrDefault(AnimationComponent),
-    );
-  }
+    entity.components.forEach((component) => this.attachComponent(component));
 
-  protected override onComponentAdded(component: Component): void {
-    if (!(component instanceof AnimationComponent)) return;
-    this.attachAnimationComponent(component);
-  }
+    const listener = (event: EntityTypes.Event) => {
+      switch (event.type) {
+        case "COMPONENT_ADDED":
+          this.attachComponent(event.payload);
+          return;
 
-  protected override onComponentRemoved(component: Component): void {
-    if (!(component instanceof AnimationComponent)) return;
-    this.attachAnimationComponent(undefined);
-  }
-
-  protected override onEntityDetached(entity: Entity): void {
-    this.attachAnimationComponent(undefined);
-    entity["_raw"].remove(this._raw);
-  }
-
-  private attachAnimationComponent(
-    animation: AnimationComponent<string> | undefined,
-  ): void {
-    this._removeAnimationListener();
-    this._removeAnimationListener = emptyFunction;
-
-    const setAttributes = (
-      animation: AnimationComponent<string> | undefined,
-    ) => {
-      const uvAttribute = this._raw.geometry.attributes.uv;
-
-      if (!animation) {
-        uvAttribute.setXY(0, 0, 1);
-        uvAttribute.setXY(1, 1, 1);
-        uvAttribute.setXY(2, 0, 0);
-        uvAttribute.setXY(3, 1, 0);
-        uvAttribute.needsUpdate = true;
-
-        this._raw.scale.set(1, 1, 1);
-        this._raw.position.set(0, 0, 0);
-      } else {
-        const { id, offsetX, offsetY } =
-          animation.animations[animation.animation].sprites[animation.index];
-
-        const { height, width, x, y } = animation.spriteSheet[id];
-
-        const sheetWidth = this.map.width;
-        const sheetHeight = this.map.height;
-
-        const x0 = x / sheetWidth;
-        const x1 = (x + width) / sheetWidth;
-        const y0 = 1 - (y + height) / sheetHeight;
-        const y1 = 1 - y / sheetHeight;
-
-        uvAttribute.setXY(0, x0, y1);
-        uvAttribute.setXY(1, x1, y1);
-        uvAttribute.setXY(2, x0, y0);
-        uvAttribute.setXY(3, x1, y0);
-        uvAttribute.needsUpdate = true;
-
-        this._raw.scale.set(width, height, 1);
-        this._raw.position.set(-offsetX, -offsetY, 0);
+        case "COMPONENT_REMOVED":
+          this.detachComponent(event.payload);
+          return;
       }
     };
 
-    setAttributes(animation);
-    if (!animation) return;
+    entity.addListener(listener);
+    this._removeEntityListener = () => entity.removeListener(listener);
+  }
+
+  private attachComponent(component: Component): void {
+    if (!(component instanceof AnimationComponent)) return;
+
+    const setAttributes = (animation: AnimationComponent<string>) => {
+      const uvAttribute = this._raw.geometry.attributes.uv;
+
+      const { id, offsetX, offsetY } =
+        animation.animations[animation.animation].sprites[animation.index];
+
+      const { height, width, x, y } = animation.spriteSheet[id];
+
+      const sheetWidth = this.map.width;
+      const sheetHeight = this.map.height;
+
+      const x0 = x / sheetWidth;
+      const x1 = (x + width) / sheetWidth;
+      const y0 = 1 - (y + height) / sheetHeight;
+      const y1 = 1 - y / sheetHeight;
+
+      uvAttribute.setXY(0, x0, y1);
+      uvAttribute.setXY(1, x1, y1);
+      uvAttribute.setXY(2, x0, y0);
+      uvAttribute.setXY(3, x1, y0);
+      uvAttribute.needsUpdate = true;
+
+      this._raw.scale.set(width, height, 1);
+      this._raw.position.set(-offsetX, -offsetY, 0);
+    };
+
+    setAttributes(component);
+    this._removeAnimationListener();
 
     const listener = (event: AnimationComponentTypes.Event<string>) => {
       switch (event.type) {
@@ -126,8 +110,33 @@ export default class RenderComponent extends Component {
       }
     };
 
-    animation.addListener(listener);
-    this._removeAnimationListener = () => animation.removeListener(listener);
+    component.addListener(listener);
+    this._removeAnimationListener = () => component.removeListener(listener);
+  }
+
+  protected override onEntityDetached(entity: Entity): void {
+    entity["_raw"].remove(this._raw);
+    entity.components.forEach((component) => this.detachComponent(component));
+    this._removeEntityListener();
+    this._removeEntityListener = emptyFunction;
+  }
+
+  private detachComponent(component: Component): void {
+    if (!(component instanceof AnimationComponent)) return;
+
+    this._removeAnimationListener();
+    this._removeAnimationListener = emptyFunction;
+
+    const uvAttribute = this._raw.geometry.attributes.uv;
+
+    uvAttribute.setXY(0, 0, 1);
+    uvAttribute.setXY(1, 1, 1);
+    uvAttribute.setXY(2, 0, 0);
+    uvAttribute.setXY(3, 1, 0);
+    uvAttribute.needsUpdate = true;
+
+    this._raw.scale.set(1, 1, 1);
+    this._raw.position.set(0, 0, 0);
   }
 
   override dispose(): void {

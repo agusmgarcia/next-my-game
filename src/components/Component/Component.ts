@@ -1,7 +1,6 @@
-import { emptyFunction, type Func } from "@agusmgarcia/react-essentials-utils";
 import * as Three from "three";
 
-import { type Entity, type EntityTypes } from "#src/entities";
+import { type Entity } from "#src/entities";
 import { Observable, type ObservableTypes } from "#src/utils";
 
 import { type Options } from "./Component.types";
@@ -13,7 +12,6 @@ export default abstract class Component<
   private readonly _single: boolean;
 
   private _entity: Entity | undefined;
-  private _removeEntityListeners: Func;
 
   constructor(options?: Partial<Options>) {
     super();
@@ -22,7 +20,6 @@ export default abstract class Component<
     this._single = !!options?.single;
 
     this._entity = undefined;
-    this._removeEntityListeners = emptyFunction;
   }
 
   get id(): string {
@@ -48,22 +45,6 @@ export default abstract class Component<
     }
 
     this._entity = entity;
-
-    const listener = (event: EntityTypes.Event) => {
-      switch (event.type) {
-        case "COMPONENT_ADDED":
-          this.onComponentAdded(event.payload);
-          return;
-
-        case "COMPONENT_REMOVED":
-          this.onComponentRemoved(event.payload);
-          return;
-      }
-    };
-
-    entity.addListener(listener);
-    this._removeEntityListeners = () => entity.removeListener(listener);
-
     this.onEntityAttached(entity);
   }
 
@@ -72,19 +53,11 @@ export default abstract class Component<
     if (!prevEntity) return;
 
     this._entity = undefined;
-    this._removeEntityListeners();
-
     this.onEntityDetached(prevEntity);
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   protected onEntityAttached(entity: Entity): void {}
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected onComponentAdded(component: Component): void {}
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected onComponentRemoved(component: Component): void {}
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   protected onEntityDetached(entity: Entity): void {}
