@@ -9,9 +9,9 @@ import {
 } from "#src/utils";
 
 import { Model } from "../Model";
-import spriteSheet from "./Brad.json";
 import normalMap from "./Brad.normal.png";
 import map from "./Brad.png";
+import spriteSheet from "./Brad.ss";
 import { type Animations } from "./Brad.types";
 import { Walk } from "./states";
 
@@ -47,9 +47,7 @@ export default class Brad extends Model<Animations> {
     await Promise.all([
       Texture.load(map.src).then((t) => (Brad.MAP_TEXTURE = t)),
       Texture.load(normalMap.src).then((t) => (Brad.NORMAL_MAP_TEXTURE = t)),
-      SpriteSheet.load(spriteSheet as unknown as string).then(
-        (s) => (Brad.SPRITE_SHEET = s),
-      ),
+      SpriteSheet.load(spriteSheet).then((s) => (Brad.SPRITE_SHEET = s)),
     ]);
   }
 }

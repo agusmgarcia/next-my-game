@@ -5,9 +5,9 @@ module.exports = (phase) => ({
   webpack: (config) => {
     config.module.rules.push({
       generator: {
-        filename: "static/json/[name].[hash][ext]",
+        filename: "static/json/[name].[hash].json",
       },
-      test: /\.json$/,
+      test: /\.ss$/,
       type: "asset/resource",
     });
 
