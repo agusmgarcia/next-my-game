@@ -37,7 +37,8 @@ export default class CameraComponent extends Component<Event> {
   }
 
   setCanvas(canvas: HTMLCanvasElement): void {
-    this._observer.unobserve(this._canvas);
+    const prevCanvas = this._canvas;
+    this._observer.unobserve(prevCanvas);
 
     this._canvas = canvas;
 
@@ -48,7 +49,7 @@ export default class CameraComponent extends Component<Event> {
 
     this.notifyListeners({
       channel: "canvas",
-      payload: undefined,
+      payload: prevCanvas,
       source: this,
       type: "CANVAS_CHANGED",
     });
@@ -59,12 +60,14 @@ export default class CameraComponent extends Component<Event> {
   }
 
   setFar(far: number): void {
+    const prevFar = this._raw.far;
+
     this._raw.far = far;
     this._raw.updateProjectionMatrix();
 
     this.notifyListeners({
       channel: "far",
-      payload: undefined,
+      payload: prevFar,
       source: this,
       type: "FAR_CHANGED",
     });
@@ -75,12 +78,14 @@ export default class CameraComponent extends Component<Event> {
   }
 
   setFov(fov: number): void {
+    const prevFov = this._raw.fov;
+
     this._raw.fov = fov;
     this._raw.updateProjectionMatrix();
 
     this.notifyListeners({
       channel: "fov",
-      payload: undefined,
+      payload: prevFov,
       source: this,
       type: "FOV_CHANGED",
     });
@@ -91,12 +96,14 @@ export default class CameraComponent extends Component<Event> {
   }
 
   setNear(near: number): void {
+    const prevNear = this._raw.near;
+
     this._raw.near = near;
     this._raw.updateProjectionMatrix();
 
     this.notifyListeners({
       channel: "near",
-      payload: undefined,
+      payload: prevNear,
       source: this,
       type: "NEAR_CHANGED",
     });

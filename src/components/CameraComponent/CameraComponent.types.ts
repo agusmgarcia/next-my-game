@@ -10,25 +10,25 @@ export type Options = {
 export type Event =
   | {
       channel: "canvas";
-      payload: undefined;
+      payload: HTMLCanvasElement;
       source: CameraComponent;
       type: "CANVAS_CHANGED";
     }
   | {
       channel: "far";
-      payload: undefined;
+      payload: number;
       source: CameraComponent;
       type: "FAR_CHANGED";
     }
   | {
       channel: "fov";
-      payload: undefined;
+      payload: number;
       source: CameraComponent;
       type: "FOV_CHANGED";
     }
   | {
       channel: "near";
-      payload: undefined;
+      payload: number;
       source: CameraComponent;
       type: "NEAR_CHANGED";
     };
