@@ -1,10 +1,9 @@
 import type * as Three from "three";
 
+import { Vector2 } from "../Vector2";
 import { type Readonly } from "./Vector3.types";
 
-export default class Vector3 implements Readonly {
-  private _x: number;
-  private _y: number;
+export default class Vector3 extends Vector2 implements Readonly {
   private _z: number;
 
   constructor();
@@ -18,19 +17,18 @@ export default class Vector3 implements Readonly {
     y?: number,
     z?: number,
   ) {
-    this._x =
+    super(
       typeof instanceOrX === "number" || typeof instanceOrX === "undefined"
         ? instanceOrX || 0
         : "x" in instanceOrX
           ? instanceOrX.x
-          : instanceOrX.r;
-
-    this._y =
+          : instanceOrX.r,
       typeof instanceOrX === "number" || typeof instanceOrX === "undefined"
         ? y || 0
         : "x" in instanceOrX
           ? instanceOrX.y
-          : instanceOrX.g;
+          : instanceOrX.g,
+    );
 
     this._z =
       typeof instanceOrX === "number" || typeof instanceOrX === "undefined"
@@ -38,22 +36,6 @@ export default class Vector3 implements Readonly {
         : "x" in instanceOrX
           ? instanceOrX.z
           : instanceOrX.b;
-  }
-
-  get x(): number {
-    return this._x;
-  }
-
-  setX(x: number): void {
-    this._x = x;
-  }
-
-  get y(): number {
-    return this._y;
-  }
-
-  setY(y: number): void {
-    this._y = y;
   }
 
   get z(): number {

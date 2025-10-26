@@ -5,4 +5,5 @@ export * from "./SpriteSheet";
 export * from "./State";
 export * from "./Texture";
 export * from "./TypedList";
+export * from "./Vector2";
 export * from "./Vector3";

@@ -1,5 +1,5 @@
-export interface Readonly {
-  get x(): number;
-  get y(): number;
+import { type Vector2Types } from "../Vector2";
+
+export interface Readonly extends Vector2Types.Readonly {
   get z(): number;
 }
