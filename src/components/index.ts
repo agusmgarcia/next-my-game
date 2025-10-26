@@ -9,3 +9,4 @@ export * from "./ScriptComponent";
 export * from "./StateComponent";
 export * from "./TransformComponent";
 export * from "./UIControlComponent";
+export * from "./UserInterfaceComponent";
