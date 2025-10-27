@@ -1,5 +1,6 @@
 export * from "./AmbientLightComponent";
 export * from "./AnimationComponent";
+export * from "./BoundingBoxComponent";
 export * from "./CameraComponent";
 export * from "./Component";
 export * from "./DirectionalLightComponent";
