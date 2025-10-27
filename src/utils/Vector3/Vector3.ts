@@ -8,12 +8,14 @@ export default class Vector3 extends Vector2 implements Readonly {
 
   constructor();
 
-  constructor(instance: Three.Vector3 | Three.Color | Three.Euler);
+  constructor(
+    instance: Three.Vector3 | Three.Color | Three.Euler | Readonly | undefined,
+  );
 
   constructor(x: number, y: number, z: number);
 
   constructor(
-    instanceOrX?: Three.Vector3 | Three.Color | Three.Euler | number,
+    instanceOrX?: Three.Vector3 | Three.Color | Three.Euler | Readonly | number,
     y?: number,
     z?: number,
   ) {
