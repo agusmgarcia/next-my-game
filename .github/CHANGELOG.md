@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.3.0](https://github.com/agusmgarcia/next-my-game/tree/v0.3.0)
+
+> October 27, 2025
+
+### Features ✅
+
+- **UIControlComponent**: remove component
+- **Scene**: add ability to display fps
+- **UserInterfaceComponent**: add component
+- **UserInterfaces**: add util
+- **Vector2**: add utils
+
+### Chores ⚙️
+
+- **RenderSystem**: rename variable
+- replace json by ss for sprite sheets
+
 ## [v0.2.0](https://github.com/agusmgarcia/next-my-game/tree/v0.2.0)
 
 > October 25, 2025
