@@ -1,21 +1,33 @@
 import { emptyFunction, type Func } from "@agusmgarcia/react-essentials-utils";
 import * as Three from "three";
 
+import { UserInterfaceComponent } from "#src/components";
 import { Entity } from "#src/entities";
 import { RenderSystem, ScriptsSystem, type System } from "#src/systems";
+import { UserInterfaces } from "#src/utils";
 
-import { type Event, type ReadonlySystemsList } from "./Scene.types";
+import {
+  type Event,
+  type Options,
+  type ReadonlySystemsList,
+} from "./Scene.types";
 import { SystemsList } from "./Scene.utils";
 
 export default abstract class Scene extends Entity<Event> {
   private readonly _systems: SystemsList;
+  private readonly _fps: UserInterfaces.Text;
+  private readonly _displayFPS: boolean;
 
   private _disposeAnimationFrame: Func;
 
-  constructor() {
+  constructor(options?: Partial<Options>) {
     super(new Three.Scene());
 
     this._systems = new SystemsList();
+    this._fps = new UserInterfaces.Text("p");
+    this._fps.setColor("white");
+    this._fps.setText("0");
+    this._displayFPS = !!options?.fps;
 
     this._disposeAnimationFrame = emptyFunction;
   }
@@ -62,6 +74,22 @@ export default abstract class Scene extends Entity<Event> {
   private init(...canvas: HTMLCanvasElement[]): void {
     this.addSystem(new ScriptsSystem());
     this.addSystem(new RenderSystem());
+
+    if (this._displayFPS) {
+      const container = new UserInterfaces.Container();
+      container.setBackgroundColor("rgb(103,78,149)");
+      container.setBorderRadius(4);
+      container.setWidth(30);
+      container.setHeight(32);
+      container.setX(-0.466);
+      container.setY(0.466);
+      container.setPadding(4);
+      container.addChild(this._fps);
+
+      this.addComponent(new UserInterfaceComponent());
+      this.components.getSingle(UserInterfaceComponent).addChild(container);
+    }
+
     this.onInit(...canvas);
   }
 
@@ -72,6 +100,7 @@ export default abstract class Scene extends Entity<Event> {
     const msPerFrame = 1000 / fps;
 
     let previous = performance.now();
+    let framesPerSecond = 0;
 
     const animate = (current: number) => {
       handler = requestAnimationFrame(animate);
@@ -82,9 +111,19 @@ export default abstract class Scene extends Entity<Event> {
       previous = current;
 
       this.systems.forEach((system) => system["onUpdate"](elapsed));
+      framesPerSecond++;
     };
 
-    this._disposeAnimationFrame = () => cancelAnimationFrame(handler);
+    const fpsIntervalHandler = setInterval(() => {
+      this._fps.setText(`${framesPerSecond + 1}`);
+      framesPerSecond = 0;
+    }, 1000);
+
+    this._disposeAnimationFrame = () => {
+      cancelAnimationFrame(handler);
+      clearInterval(fpsIntervalHandler);
+    };
+
     let handler = requestAnimationFrame(animate);
   }
 

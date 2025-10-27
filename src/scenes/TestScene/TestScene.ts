@@ -4,6 +4,10 @@ import { Brad } from "#src/models";
 import { Scene } from "../Scene";
 
 export default class TestScene extends Scene {
+  constructor() {
+    super({ fps: true });
+  }
+
   protected override async onLoad(): Promise<void> {
     await Promise.all([Brad.load()]);
   }

@@ -3,6 +3,10 @@ import { type ListTypes } from "#src/utils";
 
 import type Scene from "./Scene";
 
+export type Options = {
+  fps: boolean;
+};
+
 export interface ReadonlySystemsList extends ListTypes.Readonly<System> {}
 
 export type Event =
