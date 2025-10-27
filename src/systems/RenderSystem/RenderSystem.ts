@@ -53,7 +53,7 @@ export default class RenderSystem extends System<CameraComponent> {
   }
 
   override dispose(): void {
-    this._renderers.forEach((render) => render.dispose());
+    this._renderers.forEach((renderer) => renderer.dispose());
     this._renderers.clear();
     super.dispose();
   }
