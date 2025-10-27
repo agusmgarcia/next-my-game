@@ -8,11 +8,11 @@ export default class Vector2 implements Readonly {
 
   constructor();
 
-  constructor(instance: Three.Vector2);
+  constructor(instance: Three.Vector2 | Readonly);
 
   constructor(x: number, y: number);
 
-  constructor(instanceOrX?: Three.Vector2 | number, y?: number) {
+  constructor(instanceOrX?: Three.Vector2 | Readonly | number, y?: number) {
     this._x =
       typeof instanceOrX === "number" || typeof instanceOrX === "undefined"
         ? instanceOrX || 0
