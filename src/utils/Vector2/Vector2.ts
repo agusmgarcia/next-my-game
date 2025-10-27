@@ -8,7 +8,7 @@ export default class Vector2 implements Readonly {
 
   constructor();
 
-  constructor(instance: Three.Vector2 | Readonly);
+  constructor(instance: Three.Vector2 | Readonly | undefined);
 
   constructor(x: number, y: number);
 
